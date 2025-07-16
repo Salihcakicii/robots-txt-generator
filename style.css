@@ -1,4 +1,47 @@
 body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+  overflow-x: hidden;
+}
+
+/* Hareketli çizgiler */
+.background-lines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  z-index: -1;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.line {
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, #2196f3, transparent);
+  animation: float 6s infinite ease-in-out;
+  opacity: 0.4;
+}
+
+.line:nth-child(odd) {
+  animation-delay: 1s;
+}
+.line:nth-child(even) {
+  animation-delay: 2.5s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+body {
   font-family: 'Segoe UI', sans-serif;
   background: #f4f6f8;
   margin: 0;
