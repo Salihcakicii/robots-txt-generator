@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Robots.txt Generator</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Robots.txt Generator</h1>
+    <h1>🤖 Robots.txt Generator</h1>
+    <p class="subtitle">Arama motorlarına hangi sayfaları taramamaları gerektiğini belirtin.</p>
 
-    <label for="sitemap">Sitemap URL:</label>
-    <input type="text" id="sitemap" placeholder="https://siteadi.com/sitemap.xml" />
+    <textarea id="disallowInput" placeholder="/admin, /login gibi yolları virgülle ayırarak girin..."></textarea>
+    
+    <input type="text" id="sitemapInput" placeholder="Sitemap URL'si (opsiyonel)">
+    
+    <button id="generateBtn">robots.txt Oluştur</button>
+    <button id="copyBtn" style="display:none;">Kopyala</button>
 
-    <label for="disallow">Disallow (erişim engellenecek dizin):</label>
-    <input type="text" id="disallow" placeholder="/admin/" />
-
-    <button onclick="generateRobots()">Oluştur</button>
-
-    <pre id="output"></pre>
+    <div id="outputBox" class="output-box" style="display:none;"></div>
   </div>
 
   <script src="script.js"></script>
