@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Robots.txt Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Robots.txt Generator</h1>
+
+    <label for="sitemap">Sitemap URL:</label>
+    <input type="text" id="sitemap" placeholder="https://siteadi.com/sitemap.xml" />
+
+    <label for="disallow">Disallow (erişim engellenecek dizin):</label>
+    <input type="text" id="disallow" placeholder="/admin/" />
+
+    <button onclick="generateRobots()">Oluştur</button>
+
+    <pre id="output"></pre>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
