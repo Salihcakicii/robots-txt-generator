@@ -10,36 +10,32 @@
   <div class="container">
     <h1>Robots.txt Generator</h1>
 
-    <div class="form-group">
-      <label for="userAgent">User-agent (bot adı):</label>
-      <input type="text" id="userAgent" placeholder="ör: *">
+    <div class="input-group">
+      <label for="userAgent">User-agent:</label>
+      <input type="text" id="userAgent" value="*" />
     </div>
 
-    <div class="form-group">
-      <label for="disallow">Disallow (erişimi engelle):</label>
-      <input type="text" id="disallow" placeholder="ör: /admin/">
+    <div class="input-group">
+      <label>İzin Verilen Yollar:</label>
+      <textarea id="allowPaths" rows="3" placeholder="/blog/&#10;/hakkimizda"></textarea>
     </div>
 
-    <div class="form-group">
-      <label for="allow">Allow (erişime izin ver):</label>
-      <input type="text" id="allow" placeholder="ör: /public/">
+    <div class="input-group">
+      <label>Engellenen Yollar:</label>
+      <textarea id="disallowPaths" rows="3" placeholder="/admin/&#10;/gizli/"></textarea>
     </div>
 
-    <div class="form-group">
-      <label for="sitemap">Sitemap URL:</label>
-      <input type="text" id="sitemap" placeholder="ör: https://site.com/sitemap.xml">
-    </div>
-
-    <div class="form-group">
-      <label for="crawlDelay">Crawl-delay:</label>
-      <input type="number" id="crawlDelay" min="0" placeholder="ör: 5">
+    <div class="input-group">
+      <label for="sitemap">Sitemap (isteğe bağlı):</label>
+      <input type="url" id="sitemap" placeholder="https://siteadresin.com/sitemap.xml" />
     </div>
 
     <button onclick="generateRobots()">Oluştur</button>
 
-    <div class="output">
+    <div class="output-section">
       <h2>robots.txt</h2>
-      <pre id="output"></pre>
+      <textarea id="output" rows="8" readonly></textarea>
+      <button onclick="copyToClipboard()">Kopyala</button>
     </div>
   </div>
 
