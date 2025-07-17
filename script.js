@@ -1,130 +1,126 @@
-const languageSelect = document.getElementById("languageSelect");
-const siteNameInput = document.getElementById("siteNameInput");
-const rulesContainer = document.getElementById("rulesContainer");
-const addRuleBtn = document.getElementById("addRuleBtn");
-const preview = document.getElementById("preview");
+const cmsSelect = document.getElementById("cmsSelect");
+const loadTemplateBtn = document.getElementById("loadTemplateBtn");
+const robotsTextarea = document.getElementById("robotsTextarea");
+const validationMessage = document.getElementById("validationMessage");
 const copyBtn = document.getElementById("copyBtn");
 const downloadBtn = document.getElementById("downloadBtn");
+const languageSelect = document.getElementById("languageSelect");
+
+const templates = {
+  wordpress:
+`User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Sitemap: https://www.example.com/sitemap.xml`,
+
+  joomla:
+`User-agent: *
+Disallow: /administrator/
+Disallow: /cache/
+Disallow: /cli/
+Disallow: /components/
+Disallow: /includes/
+Disallow: /installation/
+Disallow: /language/
+Disallow: /libraries/
+Disallow: /logs/
+Disallow: /modules/
+Disallow: /plugins/
+Disallow: /templates/
+Disallow: /tmp/`,
+
+  drupal:
+`User-agent: *
+Disallow: /core/
+Disallow: /modules/
+Disallow: /profiles/
+Disallow: /scripts/
+Disallow: /themes/
+Sitemap: https://www.example.com/sitemap.xml`
+};
 
 const texts = {
   tr: {
-    userAgent: "User-agent",
-    disallow: "Disallow",
-    allow: "Allow",
-    sitemap: "Sitemap",
-    siteNamePlaceholder: "Örn: www.example.com",
-    addRule: "+ Yeni Kural Ekle",
-    copySuccess: "Kopyalandı!",
-    copyFail: "Kopyalama başarısız!",
+    loadTemplate: "Şablon yüklendi.",
+    validationSuccess: "✅ robots.txt geçerli görünüyor.",
+    validationFail: "⚠️ robots.txt içinde hatalar bulunuyor.",
+    copySuccess: "robots.txt içeriği kopyalandı!",
+    copyFail: "Kopyalama başarısız oldu!",
     downloadName: "robots.txt",
+    emptyContent: "Lütfen içerik girin.",
   },
   en: {
-    userAgent: "User-agent",
-    disallow: "Disallow",
-    allow: "Allow",
-    sitemap: "Sitemap",
-    siteNamePlaceholder: "e.g., www.example.com",
-    addRule: "+ Add New Rule",
-    copySuccess: "Copied!",
+    loadTemplate: "Template loaded.",
+    validationSuccess: "✅ robots.txt looks valid.",
+    validationFail: "⚠️ There are errors in robots.txt.",
+    copySuccess: "robots.txt content copied!",
     copyFail: "Copy failed!",
     downloadName: "robots.txt",
+    emptyContent: "Please enter content.",
   },
 };
 
-function updatePlaceholders(lang) {
-  siteNameInput.placeholder = texts[lang].siteNamePlaceholder;
-  addRuleBtn.textContent = texts[lang].addRule;
-}
-
-languageSelect.addEventListener("change", () => {
-  updatePlaceholders(languageSelect.value);
-  generatePreview();
-});
-
-function createRuleBlock() {
-  const div = document.createElement("div");
-  div.className = "rule-block";
-
-  div.innerHTML = `
-    <label>${texts[languageSelect.value].userAgent}:</label>
-    <input type="text" class="userAgentInput" placeholder="*" value="*" />
-    <label>${texts[languageSelect.value].disallow}:</label>
-    <input type="text" class="disallowInput" placeholder="/" />
-    <label>${texts[languageSelect.value].allow}:</label>
-    <input type="text" class="allowInput" placeholder="/" />
-    <label>${texts[languageSelect.value].sitemap} (optional):</label>
-    <input type="text" class="sitemapInput" placeholder="https://www.example.com/sitemap.xml" />
-    <button class="removeRuleBtn">X</button>
-  `;
-
-  const removeBtn = div.querySelector(".removeRuleBtn");
-  removeBtn.addEventListener("click", () => {
-    div.remove();
-    generatePreview();
-  });
-
-  // Inputlar değişince önizlemeyi güncelle
-  div.querySelectorAll("input").forEach(input =>
-    input.addEventListener("input", generatePreview)
-  );
-
-  return div;
-}
-
-addRuleBtn.addEventListener("click", () => {
-  rulesContainer.appendChild(createRuleBlock());
-});
-
-siteNameInput.addEventListener("input", generatePreview);
-
-function generatePreview() {
+function updateLanguage() {
   const lang = languageSelect.value;
-  const siteName = siteNameInput.value.trim();
+  validationMessage.textContent = "";
+}
+languageSelect.addEventListener("change", updateLanguage);
+updateLanguage();
 
-  let lines = [];
+loadTemplateBtn.addEventListener("click", () => {
+  const lang = languageSelect.value;
+  const selected = cmsSelect.value;
+  if (!selected) return;
+  robotsTextarea.value = templates[selected];
+  validationMessage.textContent = texts[lang].loadTemplate;
+  validateRobots(robotsTextarea.value);
+});
 
-  if(siteName) {
-    lines.push(`# Site: ${siteName}`);
+function validateRobots(text) {
+  const lang = languageSelect.value;
+  if (!text.trim()) {
+    validationMessage.textContent = texts[lang].emptyContent;
+    validationMessage.style.color = "red";
+    return false;
   }
 
-  const ruleBlocks = rulesContainer.querySelectorAll(".rule-block");
-  ruleBlocks.forEach(block => {
-    const userAgent = block.querySelector(".userAgentInput").value.trim();
-    const disallow = block.querySelector(".disallowInput").value.trim();
-    const allow = block.querySelector(".allowInput").value.trim();
-    const sitemap = block.querySelector(".sitemapInput").value.trim();
+  // Basit doğrulama: User-agent satırı en az bir tane olmalı
+  const userAgentCount = (text.match(/User-agent:/gi) || []).length;
+  if (userAgentCount === 0) {
+    validationMessage.textContent = texts[lang].validationFail + " (User-agent yok)";
+    validationMessage.style.color = "red";
+    return false;
+  }
 
-    if(userAgent) lines.push(`User-agent: ${userAgent}`);
-    if(disallow) lines.push(`Disallow: ${disallow}`);
-    if(allow) lines.push(`Allow: ${allow}`);
-    if(sitemap) lines.push(`Sitemap: ${sitemap}`);
+  // Daha detaylı kurallar kontrolü yapılabilir
 
-    lines.push(""); // boş satır
-  });
-
-  preview.textContent = lines.join("\n");
+  validationMessage.textContent = texts[lang].validationSuccess;
+  validationMessage.style.color = "green";
+  return true;
 }
 
+robotsTextarea.addEventListener("input", () => {
+  validateRobots(robotsTextarea.value);
+});
+
 copyBtn.addEventListener("click", () => {
-  navigator.clipboard.writeText(preview.textContent).then(() => {
-    alert(texts[languageSelect.value].copySuccess);
+  const lang = languageSelect.value;
+  if (!robotsTextarea.value.trim()) return alert(texts[lang].emptyContent);
+  navigator.clipboard.writeText(robotsTextarea.value).then(() => {
+    alert(texts[lang].copySuccess);
   }).catch(() => {
-    alert(texts[languageSelect.value].copyFail);
+    alert(texts[lang].copyFail);
   });
 });
 
 downloadBtn.addEventListener("click", () => {
-  const blob = new Blob([preview.textContent], { type: "text/plain" });
+  const lang = languageSelect.value;
+  if (!robotsTextarea.value.trim()) return alert(texts[lang].emptyContent);
+  const blob = new Blob([robotsTextarea.value], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = texts[languageSelect.value].downloadName;
+  a.download = texts[lang].downloadName;
   a.click();
   URL.revokeObjectURL(url);
 });
-
-// İlk kural bloğu oluştur
-rulesContainer.innerHTML = "";
-rulesContainer.appendChild(createRuleBlock());
-updatePlaceholders(languageSelect.value);
-generatePreview();
