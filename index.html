@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Robots.txt Generator</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Robots.txt Oluşturucu</h1>
+    <h1>Robots.txt Generator</h1>
 
-    <label for="userAgent">User-agent:</label>
-    <select id="userAgent">
-      <option value="*">Tüm Botlar (*)</option>
-      <option value="Googlebot">Googlebot</option>
-      <option value="Bingbot">Bingbot</option>
-    </select>
+    <div class="form-group">
+      <label for="userAgent">User-agent (bot adı):</label>
+      <input type="text" id="userAgent" placeholder="ör: *">
+    </div>
 
-    <label>Dizinleri Seç:</label>
-    <textarea id="disallow" placeholder="/admin, /gizli, /test"></textarea>
+    <div class="form-group">
+      <label for="disallow">Disallow (erişimi engelle):</label>
+      <input type="text" id="disallow" placeholder="ör: /admin/">
+    </div>
 
-    <label for="allowAll">
-      <input type="checkbox" id="allowAll" />
-      Tüm dizinlere erişime izin ver
-    </label>
+    <div class="form-group">
+      <label for="allow">Allow (erişime izin ver):</label>
+      <input type="text" id="allow" placeholder="ör: /public/">
+    </div>
 
-    <label for="sitemap">Sitemap URL (isteğe bağlı):</label>
-    <input type="text" id="sitemap" placeholder="https://ornek.com/sitemap.xml"/>
+    <div class="form-group">
+      <label for="sitemap">Sitemap URL:</label>
+      <input type="text" id="sitemap" placeholder="ör: https://site.com/sitemap.xml">
+    </div>
 
-    <button id="generateBtn">Oluştur</button>
+    <div class="form-group">
+      <label for="crawlDelay">Crawl-delay:</label>
+      <input type="number" id="crawlDelay" min="0" placeholder="ör: 5">
+    </div>
+
+    <button onclick="generateRobots()">Oluştur</button>
 
     <div class="output">
-      <h3>robots.txt Önizlemesi</h3>
-      <pre id="result"></pre>
-      <button onclick="copyToClipboard()">Kopyala</button>
+      <h2>robots.txt</h2>
+      <pre id="output"></pre>
     </div>
   </div>
 
