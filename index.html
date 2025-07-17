@@ -1,49 +1,44 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Robots.txt Generator</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Robots.txt Generator</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Robots.txt Generator</h1>
 
-    <label>Dil Seç:</label>
+    <div class="controls">
+      <label for="cmsSelect">Popüler CMS Şablonları:</label>
+      <select id="cmsSelect">
+        <option value="">Şablon seçin</option>
+        <option value="wordpress">WordPress</option>
+        <option value="joomla">Joomla</option>
+        <option value="drupal">Drupal</option>
+      </select>
+
+      <button id="loadTemplateBtn">Şablonu Yükle</button>
+    </div>
+
+    <label for="robotsTextarea">robots.txt İçeriği:</label>
+    <textarea id="robotsTextarea" placeholder="Robots.txt içeriği buraya..."></textarea>
+
+    <div id="validationMessage"></div>
+
+    <div class="buttons">
+      <button id="copyBtn">📋 Kopyala</button>
+      <button id="downloadBtn">⬇️ İndir</button>
+    </div>
+
+    <label for="languageSelect">Dil:</label>
     <select id="languageSelect">
       <option value="tr">Türkçe</option>
       <option value="en">English</option>
     </select>
-
-    <div id="siteListContainer" style="margin-top: 10px;">
-      <label>Site Adı (isteğe bağlı):</label>
-      <input type="text" id="siteNameInput" placeholder="Örn: www.example.com" />
-    </div>
-
-    <div id="rulesContainer" class="rules-container">
-      <div class="rule-block">
-        <label>User-agent:</label>
-        <input type="text" class="userAgentInput" placeholder="Örn: * veya Googlebot" value="*" />
-        <label>Disallow:</label>
-        <input type="text" class="disallowInput" placeholder="Örn: /admin/" />
-        <label>Allow:</label>
-        <input type="text" class="allowInput" placeholder="Örn: /public/" />
-        <label>Sitemap (isteğe bağlı):</label>
-        <input type="text" class="sitemapInput" placeholder="Örn: https://www.example.com/sitemap.xml" />
-        <button class="removeRuleBtn">Kaldır</button>
-      </div>
-    </div>
-
-    <button id="addRuleBtn">+ Yeni Kural Ekle</button>
-
-    <h3>robots.txt Önizleme</h3>
-    <pre id="preview" class="preview"></pre>
-
-    <button id="copyBtn">📋 Kopyala</button>
-    <button id="downloadBtn">⬇️ İndir</button>
   </div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
