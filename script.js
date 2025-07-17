@@ -1,33 +1,29 @@
-const disallowInput = document.getElementById("disallowInput");
-const sitemapInput = document.getElementById("sitemapInput");
-const generateBtn = document.getElementById("generateBtn");
-const outputBox = document.getElementById("outputBox");
-const copyBtn = document.getElementById("copyBtn");
+document.getElementById("generateBtn").addEventListener("click", function () {
+  const userAgent = document.getElementById("userAgent").value;
+  const disallow = document.getElementById("disallow").value.split(",").map(d => d.trim());
+  const allowAll = document.getElementById("allowAll").checked;
+  const sitemap = document.getElementById("sitemap").value.trim();
 
-generateBtn.addEventListener("click", () => {
-  const disallows = disallowInput.value.split(',').map(item => item.trim()).filter(Boolean);
-  const sitemap = sitemapInput.value.trim();
+  let lines = [`User-agent: ${userAgent}`];
 
-  let result = "User-agent: *\n";
-
-  disallows.forEach(path => {
-    result += `Disallow: ${path}\n`;
-  });
-
-  if (sitemap) {
-    result += `Sitemap: ${sitemap}`;
+  if (allowAll) {
+    lines.push("Disallow:");
+  } else {
+    disallow.forEach(path => {
+      if (path) lines.push(`Disallow: ${path}`);
+    });
   }
 
-  outputBox.textContent = result;
-  outputBox.style.display = "block";
-  copyBtn.style.display = "inline-block";
+  if (sitemap) {
+    lines.push(`Sitemap: ${sitemap}`);
+  }
+
+  document.getElementById("result").textContent = lines.join("\n");
 });
 
-copyBtn.addEventListener("click", () => {
-  navigator.clipboard.writeText(outputBox.textContent).then(() => {
-    copyBtn.textContent = "Kopyalandı!";
-    setTimeout(() => {
-      copyBtn.textContent = "Kopyala";
-    }, 1500);
+function copyToClipboard() {
+  const text = document.getElementById("result").textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Kopyalandı!");
   });
-});
+}
