@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Robots.txt Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Robots.txt Generator</h1>
 
-    <div class="input-group">
-      <label for="userAgent">User-agent:</label>
-      <input type="text" id="userAgent" value="*" />
+    <label>Dil Seç:</label>
+    <select id="languageSelect">
+      <option value="tr">Türkçe</option>
+      <option value="en">English</option>
+    </select>
+
+    <div id="siteListContainer" style="margin-top: 10px;">
+      <label>Site Adı (isteğe bağlı):</label>
+      <input type="text" id="siteNameInput" placeholder="Örn: www.example.com" />
     </div>
 
-    <div class="input-group">
-      <label>İzin Verilen Yollar:</label>
-      <textarea id="allowPaths" rows="3" placeholder="/blog/&#10;/hakkimizda"></textarea>
+    <div id="rulesContainer" class="rules-container">
+      <div class="rule-block">
+        <label>User-agent:</label>
+        <input type="text" class="userAgentInput" placeholder="Örn: * veya Googlebot" value="*" />
+        <label>Disallow:</label>
+        <input type="text" class="disallowInput" placeholder="Örn: /admin/" />
+        <label>Allow:</label>
+        <input type="text" class="allowInput" placeholder="Örn: /public/" />
+        <label>Sitemap (isteğe bağlı):</label>
+        <input type="text" class="sitemapInput" placeholder="Örn: https://www.example.com/sitemap.xml" />
+        <button class="removeRuleBtn">Kaldır</button>
+      </div>
     </div>
 
-    <div class="input-group">
-      <label>Engellenen Yollar:</label>
-      <textarea id="disallowPaths" rows="3" placeholder="/admin/&#10;/gizli/"></textarea>
-    </div>
+    <button id="addRuleBtn">+ Yeni Kural Ekle</button>
 
-    <div class="input-group">
-      <label for="sitemap">Sitemap (isteğe bağlı):</label>
-      <input type="url" id="sitemap" placeholder="https://siteadresin.com/sitemap.xml" />
-    </div>
+    <h3>robots.txt Önizleme</h3>
+    <pre id="preview" class="preview"></pre>
 
-    <button onclick="generateRobots()">Oluştur</button>
-
-    <div class="output-section">
-      <h2>robots.txt</h2>
-      <textarea id="output" rows="8" readonly></textarea>
-      <button onclick="copyToClipboard()">Kopyala</button>
-    </div>
+    <button id="copyBtn">📋 Kopyala</button>
+    <button id="downloadBtn">⬇️ İndir</button>
   </div>
 
   <script src="script.js"></script>
