@@ -1,21 +1,30 @@
 function generateRobots() {
   const userAgent = document.getElementById("userAgent").value.trim();
-  const disallow = document.getElementById("disallow").value.trim();
-  const allow = document.getElementById("allow").value.trim();
+  const allowPaths = document.getElementById("allowPaths").value.trim().split("\n").filter(line => line !== "");
+  const disallowPaths = document.getElementById("disallowPaths").value.trim().split("\n").filter(line => line !== "");
   const sitemap = document.getElementById("sitemap").value.trim();
-  const crawlDelay = document.getElementById("crawlDelay").value.trim();
 
-  let lines = [];
+  let result = `User-agent: ${userAgent}\n`;
 
-  if (userAgent) lines.push(`User-agent: ${userAgent}`);
-  if (disallow) lines.push(`Disallow: ${disallow}`);
-  if (allow) lines.push(`Allow: ${allow}`);
-  if (crawlDelay) lines.push(`Crawl-delay: ${crawlDelay}`);
-  if (sitemap) lines.push(`Sitemap: ${sitemap}`);
+  disallowPaths.forEach(path => {
+    result += `Disallow: ${path}\n`;
+  });
 
-  if (lines.length === 0) {
-    lines.push('# Lütfen en az bir alanı doldurun.');
+  allowPaths.forEach(path => {
+    result += `Allow: ${path}\n`;
+  });
+
+  if (sitemap) {
+    result += `\nSitemap: ${sitemap}`;
   }
 
-  document.getElementById("output").textContent = lines.join("\n");
+  document.getElementById("output").value = result;
+}
+
+function copyToClipboard() {
+  const output = document.getElementById("output");
+  output.select();
+  output.setSelectionRange(0, 99999); // mobil uyumlu kopyalama
+  document.execCommand("copy");
+  alert("Kopyalandı!");
 }
